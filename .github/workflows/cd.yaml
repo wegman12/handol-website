@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   publish-image:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
       IMAGE_NAME: kwegmansoftware/handol-church
 
