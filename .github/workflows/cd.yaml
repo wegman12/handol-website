@@ -58,14 +58,13 @@ jobs:
       - name: Register private key
         run: |
           eval `ssh-agent` && \
-          ssh-add /home/kevin/.ssh/deploy_server && \
-          echo VERSION: 1.0.0
+          ssh-add /home/kevin/.ssh/deploy_server
 
       - name: Execute Ansible Playbook
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          VERSION: 1.0.0
+          VERSION: v1.0.0
         run: |
           ansible-playbook \
           -i ansible/inventory.ini \
