@@ -5,7 +5,7 @@ on:
     branches:
       - main
 env:
-  VERSION: v1.0.3
+  VERSION: v1.0.4
   IMAGE_NAME: kwegmansoftware/handol-church
 jobs:
   publish-image:
@@ -13,12 +13,12 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: 'true'
 
       - name: Git LFS Pull
-        run: git lfs pull
+        run: git lfs pull && git lfs ls-files
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3.0.0
@@ -55,7 +55,7 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Register private key
         run: |
