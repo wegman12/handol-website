@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout class="main-layout" view="lHh Lpr lFf">
     <application-header />
     <q-page-container>
       <router-view />
@@ -12,3 +12,12 @@
 import ApplicationHeader from 'components/ApplicationHeader.vue';
 import ApplicationFooter from 'components/ApplicationFooter.vue';
 </script>
+
+<style lang="scss">
+.main-layout {
+  background-image: url(assets/20230421_105642.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+</style>
