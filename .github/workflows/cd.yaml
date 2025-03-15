@@ -1,0 +1,83 @@
+# .github/workflows/cd.yaml
+name: Deploy to Development Server
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish-image:
+    runs-on: self-hosted
+    env:
+      IMAGE_NAME: kwegmansoftware/handol-church
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Set up Docker Buildx (optional but recommended for advanced builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          sbom: true
+          provenance: mode=max
+          push: true
+          tags: '${{ env.IMAGE_NAME }}:v1.0.0'
+
+      - name: Build and push image
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          sbom: true
+          provenance: mode=max
+          push: true
+          tags: '${{ env.IMAGE_NAME }}:latest'
+
+  deploy-image:
+    if: github.ref == 'refs/heads/main'
+    runs-on:
+      group: home-server-deployment
+    needs:
+      - publish-image
+    env:
+      IMAGE_NAME: kwegmansoftware/handol-church
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Register private key
+        run: |
+          eval `ssh-agent` && \
+          ssh-add /home/kevin/.ssh/deploy_server && \
+          echo VERSION: 1.0.0
+
+      - name: Execute Ansible Playbook
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          VERSION: 1.0.0
+        run: |
+          ansible-playbook \
+          -i ansible/inventory.ini \
+          -u user \
+          --private-key /home/kevin/.ssh/deploy_server \
+          ansible/playbook-deploy.yaml
+
+  cd:
+    runs-on: self-hosted
+    needs:
+      - publish-image
+      - deploy-image
+    steps:
+      - run: echo "Workflows have succeeded!"

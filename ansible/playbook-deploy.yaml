@@ -1,0 +1,29 @@
+- name: Deploy Docker Image
+  hosts: production
+  tasks:
+    - name: Log into docker
+      community.docker.docker_login:
+        username: "{{ lookup('ansible.builtin.env', 'DOCKER_USERNAME') }}"
+        password: "{{ lookup('ansible.builtin.env', 'DOCKER_PASSWORD') }}"
+        reauthorize: true
+    - name: Pull docker image
+      community.docker.docker_image:
+        name: 'kwegmansoftware/handol-church'
+        source: pull
+        tag: "{{ lookup('ansible.builtin.env', 'VERSION') }}"
+    - name: start docker image
+      community.docker.docker_container:
+        name: 'organization_website_container'
+        image: "kwegmansoftware/handol-church:{{ lookup('ansible.builtin.env', 'VERSION') }}"
+        published_ports:
+          - 80:80
+        state: started
+    - name: Prune everything
+      community.docker.docker_prune:
+        containers: true
+        images: true
+        images_filters:
+          dangling: false
+        networks: true
+        volumes: true
+        builder_cache: true
