@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
+env:
+  VERSION: v1.0.1
+  IMAGE_NAME: kwegmansoftware/handol-church
 jobs:
   publish-image:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: kwegmansoftware/handol-church
-
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -31,7 +31,7 @@ jobs:
           sbom: true
           provenance: mode=max
           push: true
-          tags: '${{ env.IMAGE_NAME }}:v1.0.0'
+          tags: '${{ env.IMAGE_NAME }}:${{ env.VERSION }}'
 
       - name: Build and push image
         if: github.ref == 'refs/heads/main'
@@ -47,9 +47,6 @@ jobs:
     runs-on: self-hosted
     needs:
       - publish-image
-    env:
-      IMAGE_NAME: kwegmansoftware/handol-church
-
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -64,7 +61,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          VERSION: v1.0.0
+          VERSION: ${{ env.VERSION }}
         run: |
           ansible-playbook \
           -i ansible/inventory.ini \
