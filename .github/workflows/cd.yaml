@@ -44,8 +44,7 @@ jobs:
 
   deploy-image:
     if: github.ref == 'refs/heads/main'
-    runs-on:
-      group: home-server-deployment
+    runs-on: self-hosted
     needs:
       - publish-image
     env:
@@ -75,7 +74,7 @@ jobs:
           ansible/playbook-deploy.yaml
 
   cd:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs:
       - publish-image
       - deploy-image
