@@ -5,7 +5,7 @@ on:
     branches:
       - main
 env:
-  VERSION: v1.0.3
+  VERSION: v1.0.4
   IMAGE_NAME: kwegmansoftware/handol-church
 jobs:
   publish-image:
@@ -13,7 +13,7 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: 'true'
 
@@ -55,7 +55,7 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Register private key
         run: |
