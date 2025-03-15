@@ -15,7 +15,7 @@ import ApplicationFooter from 'components/ApplicationFooter.vue';
 
 <style lang="scss">
 .main-layout {
-  background-image: url(assets/20230421_105642.jpg);
+  background-image: url(assets/bukansan_np_background.jpg);
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
