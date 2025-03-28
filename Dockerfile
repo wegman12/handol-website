@@ -22,7 +22,7 @@ COPY . .
 RUN npm run build
 
 # Step 2: Production Stage
-FROM nginx:stable-alpine as production-stage
+FROM arm64v8/nginx:stable-alpine as production-stage
 
 # Add standard labels for the Docker container
 LABEL maintainer="Kevin Wegman <kevinwegman1993@gmail.com>"
