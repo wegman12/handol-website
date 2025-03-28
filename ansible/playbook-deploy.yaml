@@ -17,6 +17,7 @@
         image: "kwegmansoftware/handol-church:{{ lookup('ansible.builtin.env', 'VERSION') }}"
         published_ports:
           - 80:80
+        restart_policy: always
         state: started
     - name: Prune everything
       community.docker.docker_prune:
