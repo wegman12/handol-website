@@ -59,7 +59,7 @@ jobs:
       - name: Register private key
         run: |
           eval `ssh-agent` && \
-          ssh-add /home/kevin/.ssh/deploy_server
+          ssh-add /home/kevin/.ssh/agent_node
 
       - name: Execute Ansible Playbook
         env:
