@@ -69,8 +69,8 @@ jobs:
         run: |
           ansible-playbook \
           -i ansible/inventory.ini \
-          -u user \
-          --private-key /home/kevin/.ssh/deploy_server \
+          -u agent \
+          --private-key /home/kevin/.ssh/node_agent \
           ansible/playbook-deploy.yaml
 
   cd:
